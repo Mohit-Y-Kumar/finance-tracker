@@ -6,7 +6,8 @@ const EditTransaction = () => {
   const { id } = useParams();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-6
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50
+     via-purple-50 to-pink-50 p-6
      relative overflow-hidden flex flex-col items-center justify-start">
       {/* Floating abstract shapes */}
       <div className="absolute top-[-80px] left-[-60px] w-72 h-72
@@ -22,7 +23,8 @@ const EditTransaction = () => {
       </h2>
 
       {/* Form Container */}
-      <div className="w-full max-w-lg bg-white rounded-xl shadow-lg p-6 sm:p-10 relative z-10">
+      <div className="w-full max-w-lg bg-white rounded-xl
+       shadow-lg p-6 sm:p-10 relative z-10">
         <TransactionForm transactionId={id} />
       </div>
     </div>
