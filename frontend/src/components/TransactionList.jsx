@@ -63,7 +63,7 @@ const TransactionList = ({ transactions }) => {
                   t.amount > 0 ? "text-green-600" : "text-red-600"
                 }`}
               >
-                ₹{t.amount}
+                ₹ {t.amount}
               </span>
             </div>
             <p className="text-gray-600 text-sm">
