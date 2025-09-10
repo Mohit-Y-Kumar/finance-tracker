@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import TransactionList from "../components/TransactionList";
 import { Wallet, PlusCircle } from "lucide-react";
+import Charts from "../components/Charts";
+
 
 const HomePage = () => {
     const [transactions, setTransactions] = useState([]);
@@ -64,19 +66,19 @@ const HomePage = () => {
 
             {/* Category Filter */}
             <div className="mb-6 relative z-10">
-        <select
-          className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300"
-          value={filteredCategory}
-          onChange={(e) => setFilteredCategory(e.target.value)}
-        >
-          <option value="">All Categories</option>
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
-      </div>
+                <select
+                    className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                    value={filteredCategory}
+                    onChange={(e) => setFilteredCategory(e.target.value)}
+                >
+                    <option value="">All Categories</option>
+                    {categories.map((cat) => (
+                        <option key={cat} value={cat}>
+                            {cat}
+                        </option>
+                    ))}
+                </select>
+            </div>
 
 
             {/* Stats Cards */}
@@ -96,11 +98,16 @@ const HomePage = () => {
                     <h2 className="text-2xl font-bold text-red-600">₹ {totalExpense}</h2>
                 </div>
             </div>
+            {/* Charts */}
+            <div className="mb-6 relative z-10">
+                <Charts transactions={filteredTransactions} />
+            </div>
 
             {/* Transactions Table / Cards */}
             <div className="bg-white rounded-xl shadow-lg overflow-hidden relative z-10">
                 <TransactionList transactions={filteredTransactions} />
             </div>
+           
         </div>
     );
 };
