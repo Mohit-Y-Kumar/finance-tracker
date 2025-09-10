@@ -89,11 +89,11 @@ const HomePage = () => {
                 </div>
                 <div className="p-5 bg-green-50 rounded-xl shadow-lg hover:shadow-2xl transition transform hover:scale-105">
                     <p className="text-green-700 font-semibold">Total Income</p>
-                    <h2 className="text-2xl font-bold text-green-600">₹{totalIncome}</h2>
+                    <h2 className="text-2xl font-bold text-green-600">₹ {totalIncome}</h2>
                 </div>
                 <div className="p-5 bg-red-50 rounded-xl shadow-lg hover:shadow-2xl transition transform hover:scale-105">
                     <p className="text-red-700 font-semibold">Total Expense</p>
-                    <h2 className="text-2xl font-bold text-red-600">₹{totalExpense}</h2>
+                    <h2 className="text-2xl font-bold text-red-600">₹ {totalExpense}</h2>
                 </div>
             </div>
 
