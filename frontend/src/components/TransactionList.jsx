@@ -8,38 +8,38 @@ const TransactionList = ({ transactions }) => {
       <table className="hidden md:table table-auto w-full rounded-xl shadow-lg overflow-hidden">
         <thead>
           <tr className="bg-indigo-200 text-gray-700 text-sm">
-            <th className="px-4 py-3 text-left">Title</th>
-            <th className="px-4 py-3 text-left">Amount</th>
-            <th className="px-4 py-3 text-left">Date</th>
-            <th className="px-4 py-3 text-left">Category</th>
-            <th className="px-4 py-3 text-center">Actions</th>
+            <th className="px-4 py-3 text-left font-extrabold text-gray-900">Title</th>
+            <th className="px-4 py-3 text-left font-extrabold text-gray-900">Amount</th>
+            <th className="px-4 py-3 text-left font-extrabold text-gray-900">Date</th>
+            <th className="px-4 py-3 text-left font-extrabold text-gray-900">Category</th>
+            <th className="px-4 py-3 text-center font-extrabold text-gray-900">Actions</th>
           </tr>
         </thead>
         <tbody className="divide-y bg-white">
           {transactions.map((t) => (
             <tr key={t._id} className="hover:bg-indigo-50 transition-colors text-sm">
-              <td className="px-4 py-3 font-medium">{t.title}</td>
+              <td className="px-4 py-3  font-bold">{t.title}</td>
               <td
-                className={`px-4 py-3 font-semibold ${
+                className={`px-4 py-3 font-medium ${
                   t.amount > 0 ? "text-green-600" : "text-red-600"
                 }`}
               >
                 ₹{t.amount}
               </td>
-              <td className="px-4 py-3 font-medium">
+              <td className="px-4 py-3 font-bold">
                 {new Date(t.date).toLocaleDateString()}
               </td>
-              <td className="px-4 py-3 font-medium">{t.category}</td>
+              <td className="px-4 py-3 font-bold">{t.category}</td>
               <td className="px-4 py-3 flex justify-center gap-3">
                 <Link
                   to={`/${t._id}/edit`}
-                  className="p-2 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 shadow-md transition transform hover:scale-110"
+                  className="p-2 rounded-full bg-blue-100 text-blue-900 hover:bg-blue-200 shadow-md transition transform hover:scale-110"
                 >
                   <EditIcon className="w-4 h-4" />
                 </Link>
                 <Link
                   to={`/${t._id}/delete`}
-                  className="p-2 rounded-full bg-red-100 text-red-600 hover:bg-red-200 shadow-md transition transform hover:scale-110"
+                  className="p-2 rounded-full bg-red-100 text-red-900 hover:bg-red-200 shadow-md transition transform hover:scale-110"
                 >
                   <DeleteIcon className="w-4 h-4" />
                 </Link>
