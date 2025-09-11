@@ -12,6 +12,7 @@ import {
   CartesianGrid,
 } from "recharts";
 
+// Colors for categories
 const COLORS = [
   "#0088FE",
   "#00C49F",
@@ -22,8 +23,11 @@ const COLORS = [
   "#FF6B6B",
   "#6BCB77",
   "#FFD93D",
+  "#FF9F40",
+  "#FF5A5F",
 ];
 
+// Predefined categories
 const categories = [
   "Food",
   "Transport",
@@ -37,40 +41,46 @@ const categories = [
 ];
 
 const Charts = ({ transactions }) => {
-  // Prepare Pie chart data (Expenses by Category)
-  const expenseData = categories.map((cat) => ({
+  // Pie chart data: total of all transactions per category
+  const pieData = categories.map((cat) => ({
     name: cat,
-    value: transactions
-      .filter((t) => t.category === cat && t.amount < 0)
-      .reduce((sum, t) => sum + Math.abs(t.amount), 0),
+    value:
+      transactions
+        .filter((t) => t.category === cat)
+        .reduce((sum, t) => sum + Math.abs(t.amount), 0) || 0,
   }));
 
-  // Prepare Bar chart data (Income vs Expense by Category)
+  // Bar chart data: separate income and expense per category
   const barData = categories.map((cat) => ({
     name: cat,
-    Income: transactions
-      .filter((t) => t.category === cat && t.amount > 0)
-      .reduce((sum, t) => sum + t.amount, 0),
-    Expense: transactions
-      .filter((t) => t.category === cat && t.amount < 0)
-      .reduce((sum, t) => sum + Math.abs(t.amount), 0),
+    Income:
+      transactions
+        .filter((t) => t.category === cat && t.amount > 0)
+        .reduce((sum, t) => sum + t.amount, 0) || 0,
+    Expense:
+      transactions
+        .filter((t) => t.category === cat && t.amount < 0)
+        .reduce((sum, t) => sum + Math.abs(t.amount), 0) || 0,
   }));
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-      {/* Pie Chart: Expenses */}
-      <div className="p-4 bg-white rounded-xl shadow-lg flex justify-center">
-        <PieChart width={300} height={300}>
+      {/* Pie Chart */}
+      <div className="py-4  bg-white rounded-xl shadow-lg flex justify-center">
+        <PieChart width={550} height={350} margin={{ top: 20, right: 50, bottom: 20, left: 50 }} >
           <Pie
-            data={expenseData}
+         
+            data={pieData}
             dataKey="value"
             nameKey="name"
             cx="50%"
             cy="50%"
             outerRadius={100}
-            label
+              label={(entry) => (entry.value > 0 ? entry.name : "")}
+            stroke="none"
+            
           >
-            {expenseData.map((entry, index) => (
+            {pieData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
@@ -79,9 +89,11 @@ const Charts = ({ transactions }) => {
         </PieChart>
       </div>
 
-      {/* Bar Chart: Income vs Expense */}
-      <div className="p-4 bg-white rounded-xl shadow-lg">
-        <BarChart width={400} height={300} data={barData}>
+      {/* Bar Chart */}
+      <div className="py-4 bg-white rounded-xl shadow-lg">
+        <BarChart width={600} height={330}
+        
+        data={barData}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />
