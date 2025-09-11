@@ -41,7 +41,7 @@ const categories = [
 ];
 
 const Charts = ({ transactions }) => {
-  // Pie chart data: total of all transactions per category
+  // Pie chart data
   const pieData = categories.map((cat) => ({
     name: cat,
     value:
@@ -50,7 +50,7 @@ const Charts = ({ transactions }) => {
         .reduce((sum, t) => sum + Math.abs(t.amount), 0) || 0,
   }));
 
-  // Bar chart data: separate income and expense per category
+  // Bar chart data
   const barData = categories.map((cat) => ({
     name: cat,
     Income:
@@ -65,43 +65,56 @@ const Charts = ({ transactions }) => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-      {/* Pie Chart */}
-      <div className="py-4  bg-white rounded-xl shadow-lg flex justify-center">
-        <PieChart width={550} height={350} margin={{ top: 20, right: 50, bottom: 20, left: 50 }} >
-          <Pie
-         
-            data={pieData}
-            dataKey="value"
-            nameKey="name"
-            cx="50%"
-            cy="50%"
-            outerRadius={100}
-              label={(entry) => (entry.value > 0 ? entry.name : "")}
-            stroke="none"
-            
+      {/* Pie Chart Card */}
+      <div className="py-6 px-4 rounded-xl shadow-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 transform hover:scale-105 transition duration-300">
+        <div className="bg-white p-4 rounded-lg shadow-md">
+          <h2 className="text-lg font-semibold mb-3 text-center text-gray-700">
+            Transactions by Category
+          </h2>
+          <PieChart
+            width={500}
+            height={350}
+            margin={{ top: 20, right: 50, bottom: 20, left: 50 }}
           >
-            {pieData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Pie>
-          <Tooltip />
-          <Legend />
-        </PieChart>
+            <Pie
+              data={pieData}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={100}
+              label={(entry) => (entry.value > 0 ? entry.name : "")}
+              stroke="none"
+            >
+              {pieData.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
+        </div>
       </div>
 
-      {/* Bar Chart */}
-      <div className="py-4 bg-white rounded-xl shadow-lg">
-        <BarChart width={600} height={330}
-        
-        data={barData}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="Income" fill="#00C49F" />
-          <Bar dataKey="Expense" fill="#FF6B6B" />
-        </BarChart>
+      {/* Bar Chart Card */}
+      <div className="py-6 px-4 rounded-xl shadow-lg bg-gradient-to-r from-green-400 via-yellow-400 to-orange-400 transform hover:scale-105 transition duration-300">
+        <div className="bg-white p-4 rounded-lg shadow-md">
+          <h2 className="text-lg font-semibold mb-3 text-center text-gray-700">
+            Income vs Expense by Category
+          </h2>
+          <BarChart width={600} height={330} data={barData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="Income" fill="#00C49F" />
+            <Bar dataKey="Expense" fill="#FF6B6B" />
+          </BarChart>
+        </div>
       </div>
     </div>
   );
