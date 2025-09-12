@@ -1,7 +1,11 @@
+import { useContext } from "react"; // Added
 import TransactionForm from "../components/TransactionForm";
 import { PlusCircle } from "lucide-react";
+import { AuthContext } from "../context/AuthContext"; // Added
+
 
 const AddTransaction = () => {
+    const { token } = useContext(AuthContext);
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-6 relative overflow-hidden flex flex-col items-center justify-start">
       {/* Floating abstract shapes */}
@@ -16,7 +20,7 @@ const AddTransaction = () => {
 
       {/* Form */}
       <div className="w-full max-w-lg bg-white rounded-xl shadow-lg p-6 sm:p-10 relative z-10">
-        <TransactionForm />
+        <TransactionForm   token={token}/>
       </div>
     </div>
   );

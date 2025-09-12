@@ -7,6 +7,7 @@ const Transaction = require('../models/Transaction');
 exports.createTransaction = async (req, res, next) => {
   try {
     const { title, amount, date, category } = req.body;
+     const userId = req.user._id;
     if (!title || amount === undefined || !date || !category) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
@@ -24,7 +25,9 @@ exports.createTransaction = async (req, res, next) => {
 exports.getTransactions = async (req, res, next) => {
   try {
     const { start, end, category } = req.query;
-    const filter = {};
+    const userId = req.user._id; // NEW: logged-in user
+
+    const filter = { userId };
     if (category) filter.category = category;
     if (start || end) {
       filter.date = {};
@@ -44,7 +47,7 @@ exports.getTransactions = async (req, res, next) => {
  */
 exports.getTransaction = async (req, res, next) => {
   try {
-    const tx = await Transaction.findById(req.params.id);
+    const tx = await Transaction.findOne({ _id: req.params.id, userId: req.user._id });
     if (!tx) return res.status(404).json({ message: 'Transaction not found' });
     res.json(tx);
   } catch (err) {
@@ -59,8 +62,8 @@ exports.getTransaction = async (req, res, next) => {
 exports.updateTransaction = async (req, res, next) => {
   try {
     const { title, amount, date, category } = req.body;
-    const tx = await Transaction.findByIdAndUpdate(
-      req.params.id,
+    const tx = await Transaction.findOneAndUpdate(
+      { _id: req.params.id, userId: req.user._id }, // UPDATED
       { title, amount, date, category },
       { new: true, runValidators: true }
     );
@@ -76,8 +79,8 @@ exports.updateTransaction = async (req, res, next) => {
  * DELETE /api/transactions/:id
  */
 exports.deleteTransaction = async (req, res, next) => {
-  try {
-    const tx = await Transaction.findByIdAndDelete(req.params.id);
+  try { 
+    const tx = await Transaction.findOneAndDelete({ _id: req.params.id, userId: req.user._id });
     if (!tx) return res.status(404).json({ message: 'Transaction not found' });
     res.json({ message: 'Transaction deleted' });
   } catch (err) {

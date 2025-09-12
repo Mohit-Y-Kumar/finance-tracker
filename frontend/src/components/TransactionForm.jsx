@@ -12,26 +12,33 @@ const TransactionForm = ({ transactionId }) => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (transactionId) {
-            fetch(`http://localhost:5000/api/transactions/${transactionId}`)
-                .then((res) => res.json())
-                .then((data) => setFormData(data));
-        }
-    }, [transactionId]);
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const method = transactionId ? "PUT" : "POST";
-        const url = transactionId
-            ? `http://localhost:5000/api/transactions/${transactionId}`
-            : "http://localhost:5000/api/transactions";
-
-        await fetch(url, {
-            method,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData),
+   useEffect(() => {
+    if (transactionId) {
+      fetch(`http://localhost:5000/api/transactions/${transactionId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          // Updated line: ensure amount is a number, date is formatted
+          setFormData({
+            ...data,
+            amount: Number(data.amount),
+            date: data.date?.split("T")[0] || "",
+          });
         });
+    }
+  }, [transactionId]);
+
+   const handleSubmit = async (e) => {
+    e.preventDefault();
+    const method = transactionId ? "PUT" : "POST";
+    const url = transactionId
+      ? `http://localhost:5000/api/transactions/${transactionId}`
+      : "http://localhost:5000/api/transactions";
+
+    await fetch(url, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
 
         navigate("/");
     };

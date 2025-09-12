@@ -1,16 +1,22 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { AlertTriangle, XCircle, Trash2, Loader2 } from "lucide-react";
+import { AuthContext } from "../context/AuthContext"; // Added
 
 const DeleteTransaction = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
+  const { token } = useContext(AuthContext); // Added
 
   const handleDelete = () => {
     setIsDeleting(true);
     fetch(`http://localhost:5000/api/transactions/${id}`, {
       method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Added
+      },
     }).then(() => navigate("/"));
   };
 

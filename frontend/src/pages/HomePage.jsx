@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import TransactionList from "../components/TransactionList";
 import { Wallet, PlusCircle } from "lucide-react";
 import Charts from "../components/Charts";
-
+import { AuthContext } from "../context/AuthContext";
+import api from "../utils/api";
 
 const HomePage = () => {
     const [transactions, setTransactions] = useState([]);
     const [filteredCategory, setFilteredCategory] = useState("");
-
+    const { token, logout } = useContext(AuthContext);
+    const navigate = useNavigate();
     // Predefined categories (same as TransactionForm)
     const categories = [
         "Food",
@@ -22,11 +24,13 @@ const HomePage = () => {
         "Others",
     ];
 
-    useEffect(() => {
-        fetch("http://localhost:5000/api/transactions")
-            .then((res) => res.json())
-            .then((data) => setTransactions(data));
-    }, []);
+   useEffect(() => {
+        if (!token) return;
+
+        api.get("/transactions")
+            .then((res) => setTransactions(res.data))
+            .catch((err) => console.error("Failed to fetch transactions", err));
+    }, [token]);
 
     // Filtered transactions
     const filteredTransactions = filteredCategory
@@ -54,7 +58,7 @@ const HomePage = () => {
                     <Wallet className="w-8 h-8 text-green-600" />
                     Personal Finance Tracker
                 </h1>
-
+ <div className="flex gap-4">
                 <Link
                     to="/add"
                     className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-5 py-2 rounded-full shadow-lg transition transform hover:scale-105"
@@ -62,6 +66,17 @@ const HomePage = () => {
                     <PlusCircle className="w-5 h-5" />
                     Add Transaction
                 </Link>
+
+                <button
+                        onClick={() => {
+                            logout();
+                            navigate("/login");
+                        }}
+                        className="bg-red-500 hover:bg-red-600 text-white font-semibold px-5 py-2 rounded-full shadow-lg transition transform hover:scale-105"
+                    >
+                        Logout
+                    </button>
+                    </div>
             </header>
 
             {/* Category Filter */}

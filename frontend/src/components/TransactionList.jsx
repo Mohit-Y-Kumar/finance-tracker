@@ -1,7 +1,7 @@
 import { DeleteIcon, EditIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const TransactionList = ({ transactions }) => {
+const TransactionList = ({ transactions,  onDelete }) => {
   return (
     <div className="mt-1 overflow-x-auto relative z-10">
       {/* Desktop Table */}
@@ -37,12 +37,12 @@ const TransactionList = ({ transactions }) => {
                 >
                   <EditIcon className="w-4 h-4" />
                 </Link>
-                <Link
-                  to={`/${t._id}/delete`}
+                <button
+                  onClick={() => onDelete(t._id)}
                   className="p-2 rounded-full bg-red-100 text-red-900 hover:bg-red-200 shadow-md transition transform hover:scale-110"
                 >
                   <DeleteIcon className="w-4 h-4" />
-                </Link>
+                </button>
               </td>
             </tr>
           ))}
@@ -79,12 +79,12 @@ const TransactionList = ({ transactions }) => {
               >
                 <EditIcon className="w-4 h-4" /> Edit
               </Link>
-              <Link
-                to={`/${t._id}/delete`}
+              <button
+                onClick={() => onDelete(t._id)}
                 className="flex items-center gap-1 text-red-600 bg-red-100 px-3 py-1 rounded-full text-sm hover:bg-red-200 shadow-md transition transform hover:scale-105"
               >
                 <DeleteIcon className="w-4 h-4" /> Delete
-              </Link>
+              </button>
             </div>
           </div>
         ))}
