@@ -2,6 +2,9 @@ import { DeleteIcon, EditIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const TransactionList = ({ transactions,  onDelete }) => {
+ 
+  
+  
   return (
     <div className="mt-1 overflow-x-auto relative z-10">
       {/* Desktop Table */}
@@ -33,16 +36,16 @@ const TransactionList = ({ transactions,  onDelete }) => {
               <td className="px-4 py-3 flex justify-center gap-3">
                 <Link
                   to={`/${t._id}/edit`}
-                  className="p-2 rounded-full bg-blue-100 text-blue-900 hover:bg-blue-200 shadow-md transition transform hover:scale-110"
+                  className="p-2 rounded-full flex bg-blue-100 text-blue-900 hover:bg-blue-200 shadow-md transition transform hover:scale-110"
                 >
-                  <EditIcon className="w-4 h-4" />
+                  <EditIcon className="w-4 h-4" />Edit
                 </Link>
-                <button
-                  onClick={() => onDelete(t._id)}
-                  className="p-2 rounded-full bg-red-100 text-red-900 hover:bg-red-200 shadow-md transition transform hover:scale-110"
-                >
-                  <DeleteIcon className="w-4 h-4" />
-                </button>
+                <Link
+                to={`/${t._id}/delete`}
+                className="flex items-center gap-1 text-red-600 bg-red-100 px-3 py-1 rounded-full text-sm hover:bg-red-200 shadow-md transition transform hover:scale-105"
+              >
+                <DeleteIcon className="w-4 h-4" /> Delete
+              </Link>
               </td>
             </tr>
           ))}
@@ -79,12 +82,12 @@ const TransactionList = ({ transactions,  onDelete }) => {
               >
                 <EditIcon className="w-4 h-4" /> Edit
               </Link>
-              <button
-                onClick={() => onDelete(t._id)}
+               <Link
+                to={`/${t._id}/delete`}
                 className="flex items-center gap-1 text-red-600 bg-red-100 px-3 py-1 rounded-full text-sm hover:bg-red-200 shadow-md transition transform hover:scale-105"
               >
                 <DeleteIcon className="w-4 h-4" /> Delete
-              </button>
+              </Link>
             </div>
           </div>
         ))}
