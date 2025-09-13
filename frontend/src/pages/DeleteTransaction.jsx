@@ -1,23 +1,35 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 import { AlertTriangle, XCircle, Trash2, Loader2 } from "lucide-react";
-import { AuthContext } from "../context/AuthContext"; // Added
-
+import { AuthContext } from "../context/AuthContext"; 
 const DeleteTransaction = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
-  const { token } = useContext(AuthContext); // Added
-
+  const { token } = useContext(AuthContext); 
   const handleDelete = () => {
+    if (!token) {
+      alert("You are not authorized. Please log in first.");
+      return;
+    }
+
     setIsDeleting(true);
     fetch(`http://localhost:5000/api/transactions/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Added
+        Authorization: `Bearer ${token}`, 
       },
-    }).then(() => navigate("/"));
+    }).then((res) => {
+      if (!res.ok) throw new Error("Failed to delete transaction");
+      return res.json();
+    })
+      .then(() => navigate("/"))
+      .catch((err) => {
+        console.error(err);
+        alert("Error deleting transaction");
+        setIsDeleting(false); 
+      });
   };
 
   return (
@@ -44,6 +56,7 @@ const DeleteTransaction = () => {
             <div className="flex justify-center gap-4 flex-wrap">
               <button
                 onClick={() => navigate("/")}
+                 disabled={isDeleting}
                 className="flex items-center gap-2 px-6 py-2 rounded-lg bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition"
               >
                 <XCircle className="w-5 h-5" />
@@ -51,6 +64,7 @@ const DeleteTransaction = () => {
               </button>
               <button
                 onClick={handleDelete}
+                disabled={isDeleting}
                 className="flex items-center gap-2 px-6 py-2 rounded-lg bg-red-500 text-white font-medium hover:bg-red-600 transition"
               >
                 <Trash2 className="w-5 h-5" />
