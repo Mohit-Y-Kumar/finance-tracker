@@ -1,6 +1,7 @@
 import { ArrowDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../utils/api";
 
 const TransactionForm = ({ transactionId }) => {
     const [formData, setFormData] = useState({
@@ -12,12 +13,12 @@ const TransactionForm = ({ transactionId }) => {
 
     const navigate = useNavigate();
 
-   useEffect(() => {
-   if (transactionId) {
-            const token = localStorage.getItem("token"); 
-            fetch(`http://localhost:5000/api/transactions/${transactionId}`, {
+    useEffect(() => {
+        if (transactionId) {
+            const token = localStorage.getItem("token");
+            api.get(`/transactions/${transactionId}`, {
                 headers: {
-                    Authorization: `Bearer ${token}`, 
+                    Authorization: `Bearer ${token}`,
                 },
             })
                 .then((res) => res.json())
@@ -31,25 +32,19 @@ const TransactionForm = ({ transactionId }) => {
         }
     }, [transactionId]);
 
-  const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const method = transactionId ? "PUT" : "POST";
-        const url = transactionId
-            ? `http://localhost:5000/api/transactions/${transactionId}`
-            : "http://localhost:5000/api/transactions";
-
-        const token = localStorage.getItem("token"); 
-
-        await fetch(url, {
-            method,
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`, 
-            },
-            body: JSON.stringify(formData),
-        });
-
-        navigate("/");
+        try {
+            if (transactionId) {
+                await api.put(`/transactions/${transactionId}`, formData);
+            } else {
+                await api.post("/transactions", formData);
+            }
+            navigate("/");
+        } catch (err) {
+            console.error(err);
+            alert(err.response?.data?.message || "Something went wrong");
+        }
     };
 
     const categories = [
@@ -119,7 +114,7 @@ const TransactionForm = ({ transactionId }) => {
                 type="submit"
                 className="relative overflow-hidden px-6 py-3 rounded-full font-semibold text-white transition transform hover:scale-105"
                 style={{
-                    background: "linear-gradient(135deg, #34D399, #10B981, #059669)", 
+                    background: "linear-gradient(135deg, #34D399, #10B981, #059669)",
                     boxShadow: "0 8px 20px rgba(16, 185, 129, 0.3)",
                 }}
             >

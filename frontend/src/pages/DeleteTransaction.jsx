@@ -2,34 +2,23 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 import { AlertTriangle, XCircle, Trash2, Loader2 } from "lucide-react";
 import { AuthContext } from "../context/AuthContext"; 
+import api from "../utils/api";
+
 const DeleteTransaction = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
   const { token } = useContext(AuthContext); 
-  const handleDelete = () => {
-    if (!token) {
-      alert("You are not authorized. Please log in first.");
-      return;
-    }
-
+  const handleDelete = async () => {
     setIsDeleting(true);
-    fetch(`http://localhost:5000/api/transactions/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, 
-      },
-    }).then((res) => {
-      if (!res.ok) throw new Error("Failed to delete transaction");
-      return res.json();
-    })
-      .then(() => navigate("/"))
-      .catch((err) => {
-        console.error(err);
-        alert("Error deleting transaction");
-        setIsDeleting(false); 
-      });
+    try {
+      await api.delete(`/transactions/${id}`); 
+      navigate("/"); 
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.message || "Error deleting transaction");
+      setIsDeleting(false);
+    }
   };
 
   return (

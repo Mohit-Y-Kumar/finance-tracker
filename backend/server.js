@@ -10,8 +10,8 @@ const app = express();
 
 // CORS setup
 const allowedOrigins = [
-  "http://localhost:5173",               
-  "https://your-frontend-domain.com"     
+  "https://finance-tracker-c2r4.onrender.com"              
+      
 ];
 
 app.use(cors({

@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import api from "../utils/api";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -17,14 +18,14 @@ const LoginRegister = () => {
     e.preventDefault();
     try {
       if (mode === "login") {
-        const res = await axios.post("http://localhost:5000/api/auth/login", {
+        const res = await api.post("/auth/login", {
           email: form.email,
           password: form.password,
         });
         login(res.data.token);
         navigate("/");
       } else {
-        await axios.post("http://localhost:5000/api/auth/register", form);
+        await api.post("/auth/register", form);
         alert("Registration successful! Please login.");
         setMode("login"); 
       }
