@@ -11,7 +11,6 @@ const HomePage = () => {
     const [filteredCategory, setFilteredCategory] = useState("");
     const { token, logout } = useContext(AuthContext);
     const navigate = useNavigate();
-    // Predefined categories (same as TransactionForm)
     const categories = [
         "Food",
         "Transport",
@@ -31,6 +30,15 @@ const HomePage = () => {
             .then((res) => setTransactions(res.data))
             .catch((err) => console.error("Failed to fetch transactions", err));
     }, [token]);
+    const handleDelete = async (id) => {
+    try {
+        await api.delete(`/transactions/${id}`);
+        setTransactions(transactions.filter((t) => t._id !== id));
+    } catch (err) {
+        console.error("Failed to delete transaction", err);
+    }
+};
+    
 
     // Filtered transactions
     const filteredTransactions = filteredCategory
@@ -120,7 +128,7 @@ const HomePage = () => {
 
             {/* Transactions Table / Cards */}
             <div className="bg-white rounded-xl shadow-lg overflow-hidden relative z-10">
-                <TransactionList transactions={filteredTransactions} />
+                <TransactionList transactions={filteredTransactions}  onDelete={handleDelete}/>
             </div>
            
         </div>
