@@ -11,7 +11,7 @@ exports.createTransaction = async (req, res, next) => {
     if (!title || amount === undefined || !date || !category) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
-    const tx = await Transaction.create({ title, amount, date, category });
+    const tx = await Transaction.create({ title, amount, date, category ,userId});
     res.status(201).json(tx);
   } catch (err) {
     next(err);
@@ -25,7 +25,7 @@ exports.createTransaction = async (req, res, next) => {
 exports.getTransactions = async (req, res, next) => {
   try {
     const { start, end, category } = req.query;
-    const userId = req.user._id; // NEW: logged-in user
+    const userId = req.user._id; 
 
     const filter = { userId };
     if (category) filter.category = category;
@@ -63,7 +63,7 @@ exports.updateTransaction = async (req, res, next) => {
   try {
     const { title, amount, date, category } = req.body;
     const tx = await Transaction.findOneAndUpdate(
-      { _id: req.params.id, userId: req.user._id }, // UPDATED
+      { _id: req.params.id, userId: req.user._id },
       { title, amount, date, category },
       { new: true, runValidators: true }
     );
