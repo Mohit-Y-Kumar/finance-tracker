@@ -6,10 +6,9 @@ import { AuthContext } from "../context/AuthContext";
 
 const EditTransaction = () => {
   const { id } = useParams();
-  const { token } = useContext(AuthContext); // Added in case TransactionForm needs token
+  const { token } = useContext(AuthContext); 
 
-  const EditTransaction = () => {
-    const { id } = useParams();
+  
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50
@@ -36,5 +35,5 @@ const EditTransaction = () => {
       </div>
     );
   };
-};
+
   export default EditTransaction;
