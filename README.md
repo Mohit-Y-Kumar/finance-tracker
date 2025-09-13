@@ -70,11 +70,6 @@ Build a personal finance tracker using the **MERN stack** with **full CRUD funct
 
 ## ⚙️ Installation & Setup
 
-### 1. Clone the repository
-```bash
-git clone https://github.com/yourusername/personal-finance-tracker.git
-cd personal-finance-tracker
-
 
 
 1. Clone repository:
