@@ -10,7 +10,8 @@ const app = express();
 
 // CORS setup
 const allowedOrigins = [
-  "https://finance-tracker-c2r4.onrender.com"              
+  "https://finance-tracker-c2r4.onrender.com" ,
+  "https://finance-tracker-cfd6.onrender.com"             
       
 ];
 
