@@ -13,32 +13,41 @@ const TransactionForm = ({ transactionId }) => {
     const navigate = useNavigate();
 
    useEffect(() => {
-    if (transactionId) {
-      fetch(`http://localhost:5000/api/transactions/${transactionId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          // Updated line: ensure amount is a number, date is formatted
-          setFormData({
-            ...data,
-            amount: Number(data.amount),
-            date: data.date?.split("T")[0] || "",
-          });
+   if (transactionId) {
+            const token = localStorage.getItem("token"); 
+            fetch(`http://localhost:5000/api/transactions/${transactionId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`, 
+                },
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    setFormData({
+                        ...data,
+                        amount: Number(data.amount),
+                        date: data.date?.split("T")[0] || "",
+                    });
+                });
+        }
+    }, [transactionId]);
+
+  const handleSubmit = async (e) => {
+        e.preventDefault();
+        const method = transactionId ? "PUT" : "POST";
+        const url = transactionId
+            ? `http://localhost:5000/api/transactions/${transactionId}`
+            : "http://localhost:5000/api/transactions";
+
+        const token = localStorage.getItem("token"); 
+
+        await fetch(url, {
+            method,
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`, 
+            },
+            body: JSON.stringify(formData),
         });
-    }
-  }, [transactionId]);
-
-   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const method = transactionId ? "PUT" : "POST";
-    const url = transactionId
-      ? `http://localhost:5000/api/transactions/${transactionId}`
-      : "http://localhost:5000/api/transactions";
-
-    await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
 
         navigate("/");
     };
@@ -110,8 +119,8 @@ const TransactionForm = ({ transactionId }) => {
                 type="submit"
                 className="relative overflow-hidden px-6 py-3 rounded-full font-semibold text-white transition transform hover:scale-105"
                 style={{
-                    background: "linear-gradient(135deg, #34D399, #10B981, #059669)", // gradient green shades
-                    boxShadow: "0 8px 20px rgba(16, 185, 129, 0.3)", // subtle shadow
+                    background: "linear-gradient(135deg, #34D399, #10B981, #059669)", 
+                    boxShadow: "0 8px 20px rgba(16, 185, 129, 0.3)",
                 }}
             >
                 {transactionId ? "Update Transaction" : "Add Transaction"}
